@@ -64,6 +64,13 @@ export default function SettingsPage() {
               }}
             />
           </div>
+          <p className="mt-3 text-xs text-muted-foreground">
+            Email delivery is currently blocked by a platform-side limit — the shared email
+            integration can only deliver to the app owner's own address, not to opted-in
+            members (see <code>docs/FRICTION_LOG.md</code> F-002). This isn't a bug in the
+            app; the alert pipeline runs correctly and the overdue banner on the board is
+            the live channel in the meantime.
+          </p>
         </section>
       </div>
     </div>

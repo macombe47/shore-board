@@ -106,19 +106,33 @@ export function TripCard({ tripId, trip, events }: TripCardProps) {
       </div>
 
       {expanded && (
-        <ol className="mt-3 flex flex-col gap-1.5 border-t border-border pt-3">
+        <ol className="mt-3 flex flex-col gap-2 border-t border-border pt-3">
           {events.length === 0 && <li className="text-sm text-muted-foreground">No events yet.</li>}
-          {events.map((ev, i) => (
-            <li key={i} className="flex items-baseline justify-between gap-3 text-sm">
-              <span className="text-foreground">
-                {EVENT_LABEL[ev.kind]}
-                {ev.detail ? <span className="text-muted-foreground"> — {ev.detail}</span> : null}
-              </span>
-              <span className="whitespace-nowrap text-xs text-muted-foreground">
-                {formatBoardTime(ev.at)}
-              </span>
-            </li>
-          ))}
+          {events.map((ev, i) => {
+            // A failed alert's detail carries a short reason plus — since
+            // delivery can't be demoed right now (F-002) — a preview of
+            // what the email would have said, separated by a blank line.
+            const [summary, ...rest] = (ev.detail ?? '').split('\n\n')
+            const preview = rest.join('\n\n')
+            return (
+              <li key={i} className="text-sm">
+                <div className="flex items-baseline justify-between gap-3">
+                  <span className="text-foreground">
+                    {EVENT_LABEL[ev.kind]}
+                    {summary ? <span className="text-muted-foreground"> — {summary}</span> : null}
+                  </span>
+                  <span className="whitespace-nowrap text-xs text-muted-foreground">
+                    {formatBoardTime(ev.at)}
+                  </span>
+                </div>
+                {preview && (
+                  <pre className="mt-1 whitespace-pre-wrap rounded-md border border-border bg-background/50 p-2 text-xs text-muted-foreground">
+                    {preview}
+                  </pre>
+                )}
+              </li>
+            )
+          })}
         </ol>
       )}
     </div>

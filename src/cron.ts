@@ -165,6 +165,8 @@ async function runOverdueScan(ctx: CronContext, env: Env): Promise<void> {
 
   for (const trip of toAttempt) {
     let detail: string
+    const subject = `Overdue: ${trip.data.vesselName}`
+    const text = buildAlertEmailText(trip.data)
 
     if (members.length === 0) {
       detail = 'No opted-in recipients'
@@ -174,14 +176,19 @@ async function runOverdueScan(ctx: CronContext, env: Env): Promise<void> {
           await ctx.integrations.call('email/send', {
             from: 'Shore Board <alerts@shore-board.app.space>',
             to: member.data.email,
-            subject: `Overdue: ${trip.data.vesselName}`,
-            text: buildAlertEmailText(trip.data),
+            subject,
+            text,
           })
         }
         detail = `Sent to ${members.length} recipient(s)`
         emailsSentThisRun += members.length
       } catch (err) {
-        detail = `Delivery failed: ${err instanceof Error ? err.message : String(err)}`
+        // Delivery is currently blocked platform-side (docs/FRICTION_LOG.md
+        // F-002), not by our code — include what the email would have said
+        // so the content is still demonstrable even though it can't land in
+        // an inbox. Keep this close to the failure reason, not hidden in a
+        // separate field, so the trip timeline tells the whole story inline.
+        detail = `Delivery failed: ${err instanceof Error ? err.message : String(err)}\n\nWould have sent —\nSubject: ${subject}\n${text}`
       }
     }
 
