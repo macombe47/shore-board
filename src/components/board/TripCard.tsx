@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Badge, Button, useToast } from '@/components/ui'
+import { useUser } from 'deepspace'
+import { Badge, Button, ConfirmModal, useToast } from '@/components/ui'
 import { callAction } from '@/lib/actions'
 import { formatBoardTime, formatBoardTimeShort } from '@/lib/time'
 import type { CallSheet, TripData, TripEventData } from './types'
@@ -25,10 +26,17 @@ const EVENT_LABEL: Record<TripEventData['kind'], string> = {
 }
 
 export function TripCard({ tripId, trip, events }: TripCardProps) {
-  const { error } = useToast()
+  const { success, error } = useToast()
+  const { user } = useUser()
   const [expanded, setExpanded] = useState(false)
   const [checkingIn, setCheckingIn] = useState(false)
+  const [confirmingDelete, setConfirmingDelete] = useState(false)
+  const [deleting, setDeleting] = useState(false)
   const badge = STATUS_BADGE[trip.status]
+  // Client-side only — real enforcement is the owner check in the
+  // deleteTrip action itself (src/actions/index.ts), same reasoning as
+  // the cron-admin page's isOwner gate.
+  const isOwner = user?.role === 'admin'
 
   async function handleCheckIn() {
     setCheckingIn(true)
@@ -37,6 +45,18 @@ export function TripCard({ tripId, trip, events }: TripCardProps) {
       if (!result.success) error('Could not check in', result.error)
     } finally {
       setCheckingIn(false)
+    }
+  }
+
+  async function handleDelete() {
+    setDeleting(true)
+    try {
+      const result = await callAction('deleteTrip', { tripId })
+      if (!result.success) error('Could not delete', result.error)
+      else success('Trip deleted', `${trip.vesselName} removed from the board.`)
+    } finally {
+      setDeleting(false)
+      setConfirmingDelete(false)
     }
   }
 
@@ -103,7 +123,27 @@ export function TripCard({ tripId, trip, events }: TripCardProps) {
         <Button size="sm" variant="ghost" onClick={() => setExpanded((v) => !v)}>
           {expanded ? 'Hide timeline' : `Timeline (${events.length})`}
         </Button>
+        {isOwner && (
+          <Button
+            size="sm"
+            variant="ghost"
+            className="ml-auto text-destructive hover:text-destructive"
+            onClick={() => setConfirmingDelete(true)}
+          >
+            Delete
+          </Button>
+        )}
       </div>
+
+      <ConfirmModal
+        open={confirmingDelete}
+        onClose={() => setConfirmingDelete(false)}
+        onConfirm={handleDelete}
+        loading={deleting}
+        title={`Delete ${trip.vesselName}?`}
+        description="Permanently removes this trip and its timeline. This can't be undone."
+        confirmText="Delete"
+      />
 
       {expanded && (
         <ol className="mt-3 flex flex-col gap-2 border-t border-border pt-3">

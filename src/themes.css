@@ -16,6 +16,38 @@
  *   4. Switch to it via `data-theme` on <html> in index.html.
  */
 
+/* Harbor — Shore-Board's own theme: deep navy with a sea-glass teal accent.
+ * Status colors (success/warning/info/destructive) are deliberately left at
+ * the slate default in styles.css — they're functional (overdue = red,
+ * returned = green), not brand colors, and are already verified across the
+ * board, cron-admin, and settings screens. Only the base palette and the
+ * primary accent change here. */
+[data-theme="harbor"] {
+  --color-background: #0a1420;
+  --color-foreground: #e6edf3;
+  --color-card: #0f1c2e;
+  --color-card-foreground: #e6edf3;
+  --color-popover: #0f1c2e;
+  --color-popover-foreground: #e6edf3;
+  --color-primary: #2dd4bf;
+  --color-primary-foreground: #042f2e;
+  --color-secondary: #15233a;
+  --color-secondary-foreground: #e6edf3;
+  --color-muted: #15233a;
+  --color-muted-foreground: #8fa3bd;
+  --color-accent: #1b2c47;
+  --color-accent-foreground: #e6edf3;
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #ffffff;
+  --color-border: rgba(100, 130, 170, 0.25);
+  --color-input: rgba(100, 130, 170, 0.25);
+  --color-ring: #2dd4bf;
+  --shadow-card: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  --shadow-card-hover: 0 2px 8px 0 rgba(0, 0, 0, 0.28);
+  --color-shell: #0a1420;
+  --color-shell-panel: #0f1c2e;
+}
+
 /* Paper — light example theme; shows the full token contract incl.
  * `color-scheme: light`. Replace or delete it once the app has its own. */
 [data-theme="paper"] {

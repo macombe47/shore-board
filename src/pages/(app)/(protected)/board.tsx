@@ -14,6 +14,7 @@ import { DepartureForm } from '@/components/board/DepartureForm'
 import { TripCard } from '@/components/board/TripCard'
 import { OnWatchNow } from '@/components/board/OnWatchNow'
 import { WeatherChip } from '@/components/board/WeatherChip'
+import { isToday } from '@/lib/time'
 import type { TripData, TripEventData } from '@/components/board/types'
 
 export default function BoardPage() {
@@ -38,7 +39,11 @@ export default function BoardPage() {
   const groups = useMemo(() => {
     const overdue = trips.records.filter((t) => t.data.status === 'overdue')
     const out = trips.records.filter((t) => t.data.status === 'out')
-    const returnedToday = trips.records.filter((t) => t.data.status === 'returned')
+    // "Today" per the brief's own grouping — a trip returned on an earlier
+    // day drops off the board (still in the database, just not shown here).
+    const returnedToday = trips.records.filter(
+      (t) => t.data.status === 'returned' && t.data.checkedInAt && isToday(t.data.checkedInAt),
+    )
     overdue.sort((a, b) => a.data.expectedReturnAt.localeCompare(b.data.expectedReturnAt))
     out.sort((a, b) => a.data.expectedReturnAt.localeCompare(b.data.expectedReturnAt))
     returnedToday.sort((a, b) => (b.data.checkedInAt ?? '').localeCompare(a.data.checkedInAt ?? ''))

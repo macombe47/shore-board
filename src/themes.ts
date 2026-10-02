@@ -18,9 +18,14 @@
 
 export const THEMES = [
   {
+    id: 'harbor',
+    label: 'Harbor',
+    description: "Shore-Board's own theme — deep navy with a sea-glass teal accent.",
+  },
+  {
     id: 'slate',
     label: 'Slate',
-    description: 'Neutral dark placeholder default. Replace with your own theme.',
+    description: 'Neutral dark scaffold default, kept as an alternate.',
   },
   {
     id: 'paper',
@@ -33,9 +38,9 @@ export type ThemeId = (typeof THEMES)[number]['id']
 
 /** Read the currently active theme id from <html data-theme>. */
 export function getActiveTheme(): ThemeId {
-  if (typeof document === 'undefined') return 'slate'
+  if (typeof document === 'undefined') return 'harbor'
   const id = document.documentElement.getAttribute('data-theme') as ThemeId | null
-  return id ?? 'slate'
+  return id ?? 'harbor'
 }
 
 /** Look up a theme entry by id, or fall back to the first theme. */

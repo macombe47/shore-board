@@ -4,11 +4,12 @@
   To switch themes, change `data-theme` to any id defined in src/themes.ts.
   Color values per theme live in src/themes.css.
 -->
-<html lang="en" data-theme="slate">
+<html lang="en" data-theme="harbor">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
     <title>Shore-Board</title>
     <!--
       First-paint background, keyed to the data-theme attribute above.
@@ -18,7 +19,8 @@
       adding or editing themes.
     -->
     <style>
-      html { background-color: #0a0a0a; color-scheme: dark; }
+      html { background-color: #0a1420; color-scheme: dark; }
+      html[data-theme="slate"] { background-color: #0a0a0a; }
       html[data-theme="paper"] { background-color: #ffffff; color-scheme: light; }
       /* Add one line per theme you create, mirroring its --color-background. */
     </style>

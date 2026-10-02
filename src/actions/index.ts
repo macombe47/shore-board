@@ -167,9 +167,37 @@ export const createSampleFleet: ActionHandler<Env> = async ({ tools }) => {
   return { success: true, data: { tripIds } }
 }
 
+/**
+ * Owner-only: permanently remove a trip and its timeline (e.g. stray test
+ * data). Trips permissions only grant `delete` to admin, and the owner is
+ * always pinned to admin — but admin could also mean a future collaborator,
+ * so this checks OWNER_USER_ID directly rather than trusting the role,
+ * matching the same reasoning as D-011's cron restriction.
+ */
+export const deleteTrip: ActionHandler<Env> = async ({ userId, params, tools, env }) => {
+  if (env.OWNER_USER_ID && userId !== env.OWNER_USER_ID) {
+    return { success: false, error: 'Forbidden: owner only' }
+  }
+  const tripId = params.tripId as string
+  if (!tripId) return { success: false, error: 'tripId is required' }
+
+  // Bounded batch delete (docs: tools.deleteWhere) — loop until a page comes
+  // back under the limit, in case a trip somehow accumulated more events
+  // than one page holds.
+  let deleted = 0
+  do {
+    const result = await tools.deleteWhere('trip-events', { tripId }, 100)
+    if (!result.success) return result
+    deleted = result.data.deleted
+  } while (deleted >= 100)
+
+  return tools.remove('trips', tripId)
+}
+
 export const actions: Record<string, ActionHandler<Env>> = {
   logDeparture,
   checkInTrip,
   createQuickTestTrip,
   createSampleFleet,
+  deleteTrip,
 }
