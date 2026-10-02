@@ -6,8 +6,8 @@ Source: the DeepSpace build exercise brief and its "What we look for" rubric. Fi
 
 | Requirement | Status | Evidence |
 |---|---|---|
-| Live URL on `<name>.app.space` | [ ] | |
-| Repository link, accessible to reviewers (public) | [ ] | |
+| Live URL on `<name>.app.space` | [x] | https://shore-board.app.space (deployed 2026-10-02, commit e1bc772) |
+| Repository link, accessible to reviewers (public) | [x] | https://github.com/macombe47/shore-board (public, D-014) |
 | Note: what I built | [ ] | |
 | Note: which DeepSpace integrations I used | [ ] | |
 | Note: the main tradeoff | [ ] | |
