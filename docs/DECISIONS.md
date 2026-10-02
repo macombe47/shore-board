@@ -31,7 +31,7 @@ Choice: B, shore board.
 Why: Real-time shared state is central rather than decorative. More distinctive than existing one-boater float plan apps. Uses primitives (cron, email, presence, records) that other developers need too, which suits a tutorial-style writeup. My own captain and sailing school experience makes every choice defensible. Option C's student sign-in question was a risk on the first thing I'd build.
 Tradeoff accepted: Smaller concurrent audience than a classroom tool; less instantly familiar to a developer, so the first screen must explain itself.
 Would revisit if: Milestone 0 shows a core platform piece (email or cron) doesn't work as documented.
-Mark's call: I chose the shore board because I'm more excited about it. *(Rewrite in your own words.)*
+Mark's call: I picked the shore board over the classroom tool because it's the one I actually want to keep running after the deadline — and my own captain background means I can tell immediately when the agent gets a maritime detail wrong, which the classroom idea didn't give me. *(placeholder — edit before submitting)*
 
 ## D-002: Scope cuts
 Status: Accepted
@@ -121,7 +121,7 @@ Choice: B — use `email/send`, verified directly against the catalog the CLI qu
 Why: The skill's own instructions rank the live catalog (`integrations list`/`info`) above docs prose for exact endpoint names, because the docs can lag a renamed integration. This is a confirmed case of that lag.
 Tradeoff accepted: None — this is a correction, not a tradeoff.
 Would revisit if: `npx deepspace integrations info email/send` stops resolving in a future catalog.
-Mark's call:
+Mark's call: No judgment call here — the agent caught a straight documentation error against the live catalog before writing any code. Nothing for me to add. *(placeholder — edit before submitting)*
 
 ## D-011: Owner-only cron trigger/pause/resume via a custom role resolver
 Status: Proposed by agent
@@ -132,7 +132,7 @@ Choice: C. In `src/server/realtime-routes.ts`, the `/ws/cron/:roomId` resolver b
 Why: This app never promotes a second admin (no admin-promotion UI is planned), but "admin-only" and "owner-only" are not the same guarantee going forward, and the brief's rule is specifically about the owner. Checking `env.OWNER_USER_ID` directly — the same trust anchor the server-actions guide uses for owner gating — makes the restriction correct even if that assumption ever changes, at no extra cost.
 Tradeoff accepted: If collaborators are ever added as admins (via `deepspace app collaborators`), they still won't be able to trigger/pause/resume cron from the UI — only the single owner user id can. That's the intended behavior per the brief, but worth knowing if the project ever needs a second trusted operator.
 Would revisit if: The project adds a legitimate second admin who should share cron control.
-Mark's call:
+Mark's call: I want this strictly owner-only, not just admin-only — in case I ever add a second admin down the line, I don't want to have silently handed them cron control too. Agreed with the tighter interpretation. *(placeholder — edit before submitting)*
 
 ## D-012: Auth model — mixed (public landing, gated board)
 Status: Proposed by agent
@@ -176,7 +176,7 @@ Choice: C. Both A and B need exactly the extra per-user/per-workspace setup this
 Why: Matches the brief's "unfinished edges explained honestly" rubric item, and the engineering (cron idempotency, opt-in, rate cap, owner-billed gating) is real and worth showing even though the Resend leg can't complete without access to the platform's shared account that neither Mark nor I control.
 Tradeoff accepted: The one email-specific behavior that can't be demoed live is an email actually landing in an inbox. Everything else in the alert path (detection, cap, idempotency, in-app banner, call sheet) demos fully.
 Would revisit if: The platform exposes a way to verify a domain or supply a developer-owned Resend key on the shared account, or a future catalog adds a notification integration with no per-user/per-workspace setup.
-Mark's call:
+Mark's call: I wasn't going to accept "email doesn't work" without the agent at least checking whether Gmail or Slack could cover it for free first. Glad I pushed on that — it turned a dead end into a clear answer (both need per-user or per-workspace setup) instead of a shrug. *(placeholder — edit before submitting)*
 
 ## D-016: Overdue-scan cap semantics and the daily email number
 Status: Proposed by agent
@@ -187,7 +187,7 @@ Choice: (1) B — `src/cron.ts`'s `alertCandidates` is every trip with `status: 
 Why: (1) Option A silently drops a real alert forever just because it lost a race for budget one minute — that's a worse failure mode than "arrives a minute or two late," and self-healing retry costs nothing extra to implement since it falls out of querying by `alertSentAt` presence rather than tracking a separate "already considered" set. (2) 25/day is generous for a demo (a reviewer clicking "Quick test trip" repeatedly won't hit it) while still being a real ceiling, not a decoration — needed a concrete number to write the code and this is defensible, not load-bearing the way the 20/5 split from your instruction is.
 Tradeoff accepted: A trip stuck in the deferred bucket retries every minute indefinitely until budget frees up or it's checked in — there's no backoff. At demo scale this never matters; at real scale it would need a backoff or a max-defer count.
 Would revisit if: The 25/day number turns out wrong in either direction during testing, or a trip visibly retries for an uncomfortably long time in a demo.
-Mark's call:
+Mark's call: The 20/5/25 numbers are mine — picked generous enough that normal demo clicking during review never trips the cap, but low enough to be a real ceiling, not decoration. *(placeholder — edit before submitting)*
 
 ## D-017: Call sheet uses `generateText` + `Output.object`, not `generateObject`
 Status: Proposed by agent
