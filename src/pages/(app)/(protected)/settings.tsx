@@ -3,11 +3,23 @@
  * because (protected)/_layout.tsx already wraps the subtree in <AuthGate>.
  */
 
-import { signOut, useUser } from 'deepspace'
-import { Button } from '@/components/ui'
+import { signOut, useUser, useAuth, useQuery, useMutations } from 'deepspace'
+import { Button, Label, Switch } from '@/components/ui'
+
+interface UserRowData {
+  wantsAlertEmail?: number
+}
 
 export default function SettingsPage() {
   const { user } = useUser()
+  const { userId } = useAuth()
+  // Member's read policy on `users` is 'own' (exactly one row back), but
+  // admin's is `true` (every row in the collection) — so `records[0]` is
+  // only "my row" for a member. Find by id so this works for both roles.
+  const { records } = useQuery<UserRowData>('users')
+  const { put, ready } = useMutations<UserRowData>('users')
+  const ownRow = records.find((r) => r.recordId === userId)
+  const wantsAlertEmail = !!ownRow?.data.wantsAlertEmail
 
   return (
     // No background on page wrappers — pages render into whatever the app's
@@ -34,6 +46,24 @@ export default function SettingsPage() {
           <Button variant="secondary" className="mt-6" onClick={() => signOut()}>
             Sign out
           </Button>
+        </section>
+
+        <section className="mt-6 rounded-lg border border-border bg-card p-6">
+          <h2 className="mb-4 text-lg font-semibold">Overdue alerts</h2>
+          <div className="flex items-center justify-between gap-4">
+            <Label htmlFor="wantsAlertEmail" className="font-normal text-muted-foreground">
+              Email me when a boat is flagged overdue
+            </Label>
+            <Switch
+              id="wantsAlertEmail"
+              checked={wantsAlertEmail}
+              disabled={!ready || !userId}
+              onCheckedChange={(checked) => {
+                if (!userId) return
+                void put(userId, { wantsAlertEmail: checked ? 1 : 0 })
+              }}
+            />
+          </div>
         </section>
       </div>
     </div>
