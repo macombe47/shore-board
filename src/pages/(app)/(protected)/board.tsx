@@ -80,7 +80,7 @@ export default function BoardPage() {
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">{APP_NAME}</h1>
+          <h1 className="font-display text-2xl font-semibold tracking-tight">{APP_NAME}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Who&apos;s out, who&apos;s overdue, and who&apos;s back.
           </p>

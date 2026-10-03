@@ -37,7 +37,17 @@
   --color-border: rgba(60, 64, 67, 0.6);
   --color-input: rgba(60, 64, 67, 0.6);
   --color-ring: #818cf8;
-  --radius: 0.5rem;
+  --radius: 0.375rem;
+
+  /*
+   * Display/heading font — Space Grotesk, loaded via <link> in index.html.
+   * Body text stays on the system stack below (styles.css line ~167):
+   * reads instantly, no web-font cost, and body copy is meant to disappear.
+   * The heading voice is the one deliberate pick (docs/DECISIONS.md D-019)
+   * — geometric and a little technical, like an instrument panel rather
+   * than a marketing font, because this is a safety tool, not a pitch.
+   */
+  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
 
   /*
    * Map the rounded-* utilities onto --radius so a theme (or you) can change

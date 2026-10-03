@@ -27,7 +27,7 @@ export default function SettingsPage() {
     // stay transparent and inherit it.
     <div className="min-h-full text-foreground">
       <div className="mx-auto max-w-2xl px-6 py-20">
-        <h1 className="mb-12 text-4xl font-bold tracking-tight">Settings</h1>
+        <h1 className="font-display mb-12 text-4xl font-bold tracking-tight">Settings</h1>
 
         <section className="rounded-lg border border-border bg-card p-6">
           <h2 className="mb-4 text-lg font-semibold">Your account</h2>
