@@ -31,7 +31,7 @@ Choice: B, shore board.
 Why: Real-time shared state is central rather than decorative. More distinctive than existing one-boater float plan apps. Uses primitives (cron, email, presence, records) that other developers need too, which suits a tutorial-style writeup. My own captain and sailing school experience makes every choice defensible. Option C's student sign-in question was a risk on the first thing I'd build.
 Tradeoff accepted: Smaller concurrent audience than a classroom tool; less instantly familiar to a developer, so the first screen must explain itself.
 Would revisit if: Milestone 0 shows a core platform piece (email or cron) doesn't work as documented.
-Mark's call: I picked the shore board over the classroom tool because it's the one I actually want to keep running after the deadline — and my own captain background means I can tell immediately when the agent gets a maritime detail wrong, which the classroom idea didn't give me. *(placeholder — edit before submitting)*
+Mark's call: I picked the shore board over the classroom tool because I have a friend who runs a sailing school, and I'd like to share this with him. He's told me he tracks incoming and outgoing boats on paper, and he's worried one day he might forget a boat is out before he heads home.
 
 ## D-002: Scope cuts
 Status: Accepted
@@ -42,7 +42,7 @@ Choice: Cut GPS tracking, maps, SMS, multi-organization, native app.
 Why: Each is large, and none is needed for the important path.
 Tradeoff accepted: Board relies on the plan and check-ins, not live position.
 Would revisit if: Core is done and verified by Sunday morning (then still probably no).
-Mark's call: Easy yes — none of these move the needle on the important path, and cutting them up front kept the week from sprawling. *(placeholder — edit before submitting)*
+Mark's call: Easy yes — none of these move the needle on the important path, and cutting them up front kept the week from sprawling.
 
 ## D-003: Alert channel
 Status: Accepted
@@ -54,7 +54,7 @@ Why: No API keys to manage; documented as callable from cron. SMS needs carrier 
 Tradeoff accepted: Email is slower to notice than SMS and can land in spam.
 Would revisit if: Resend endpoint requires a verified sender domain I can't set up in time.
 Superseded in part by: D-010 (the endpoint name is `email/send`, not `resend/send-email`).
-Mark's call: Email was the obvious call for a first pass — SMS's carrier-registration lead time alone would have eaten the week. Turned out there was a platform-side catch nobody could've predicted from the docs (see D-015), but the channel choice itself was right. *(placeholder — edit before submitting)*
+Mark's call: Email was the obvious call for a first pass — SMS's carrier-registration lead time alone would have eaten the week. Turned out there was a platform-side catch nobody could've predicted from the docs (see D-015), but the channel choice itself was right.
 
 ## D-004: Overdue detection
 Status: Accepted
@@ -65,7 +65,7 @@ Choice: One cron task every minute scanning trips that are out and past due; sto
 Why: Client timers fail when nobody has the board open. Cron runs server-side. One-minute granularity is fine for this use. Idempotency prevents an email every minute.
 Tradeoff accepted: Up to about a minute of delay; a scan each minute even when nothing is out.
 Would revisit if: Trip volume grew large enough that scanning became costly.
-Mark's call: One-minute polling is plenty for this use case — a boat being a minute or two late to get flagged isn't the failure mode I'm worried about. Agreed without hesitation. *(placeholder — edit before submitting)*
+Mark's call: One-minute polling is plenty for this use case — a boat being a minute or two late to get flagged isn't the failure mode I'm worried about. Agreed without hesitation.
 
 ## D-005: Weather source
 Status: Accepted. Verify in Milestone 0.
@@ -76,7 +76,7 @@ Choice: OpenWeatherMap via the proxy, fetched by cron every 30 minutes and store
 Why: Uses the platform's integration layer rather than custom fetch code; one cached record means visitors don't each trigger an owner-billed call.
 Tradeoff accepted: NWS is the more authoritative US source for marine and lake forecasts.
 Would revisit if: OpenWeatherMap data is thin for the location, or the endpoint isn't in the catalog.
-Mark's call: OpenWeatherMap over hitting NWS directly was the right call for staying inside the platform's integration layer — trading a bit of marine-forecast authority for not hand-rolling API auth was worth it. *(placeholder — edit before submitting)*
+Mark's call: OpenWeatherMap over hitting NWS directly was the right call for staying inside the platform's integration layer — trading a bit of marine-forecast authority for not hand-rolling API auth was worth it.
 
 ## D-006: Role of AI
 Status: Accepted
@@ -87,7 +87,7 @@ Choice: Generate a call sheet when a boat goes overdue, as a background job, wit
 Why: A stressed shore contact needs a clear script with vessel description, people aboard, planned area, and timeline. AI can turn free-text route notes and the timeline into a concise script and point out missing info. The alert never waits on AI.
 Tradeoff accepted: AI can be wrong; the sheet must stick to recorded facts and say it supports, never replaces, calling for help.
 Would revisit if: Testing shows the AI adds nothing beyond the template. Then ship the template and explain why in the writeup.
-Mark's call: This is the one place I wanted AI to earn its spot rather than being bolted on — a call sheet a volunteer can actually read off is a real need, not a demo trick. The template fallback was non-negotiable for me. *(placeholder — edit before submitting)*
+Mark's call: This is the one place I wanted AI to earn its spot rather than being bolted on — a call sheet a volunteer can actually read off is a real need, not a demo trick. The template fallback was non-negotiable for me.
 
 ## D-007: Demo mode and safety framing
 Status: Accepted
@@ -95,7 +95,7 @@ Date: 2026-09-30
 Context: Reviewers can't wait hours for a boat to go overdue, and a safety tool that fails silently is dangerous.
 Choice: "Quick test trip (2 min)" and "Add sample fleet" buttons; a permanent banner saying it's a demonstration and not a substitute for a filed float plan or calling for help.
 Why: Lets the important path be tested in under five minutes; states limits honestly.
-Mark's call: The banner is doing real work, not just covering us legally — anyone landing on this cold should know in one glance it's not a real safety tool. Keep it exactly where it is. *(placeholder — edit before submitting)*
+Mark's call: The banner is doing real work, not just covering us legally — anyone landing on this cold should know in one glance it's not a real safety tool. Keep it exactly where it is.
 
 ## D-008: Cost and abuse guardrails
 Status: Accepted
@@ -103,14 +103,14 @@ Date: 2026-09-30
 Context: AI, email, and weather calls are billed to the app owner, and the scaffold lets any signed-in user trigger cron tasks by default.
 Choice: Auth-gate every owner-billed call; restrict cron trigger/pause/resume to the owner; one alert per trip; a global daily email cap; a cap on active trips.
 Why: A public demo URL will be visited by strangers and possibly bots.
-Mark's call: A public demo URL getting hit by bots is a real scenario, not paranoia — I'd rather the caps be slightly too conservative than find out the hard way. *(placeholder — edit before submitting)*
+Mark's call: A public demo URL getting hit by bots is a real scenario, not paranoia — I'd rather the caps be slightly too conservative than find out the hard way.
 
 ## D-009: Data used
 Status: Accepted
 Date: 2026-09-30
 Context: The brief forbids confidential information from an employer, school, or client.
 Choice: Sample boats and people only. Nothing from Combe Sailing customers or from any client project.
-Mark's call: Non-negotiable given the brief's confidentiality rule — nothing from Combe Sailing or any client project goes anywhere near this repo. *(placeholder — edit before submitting)*
+Mark's call: Non-negotiable given the brief's confidentiality rule — nothing from Combe Sailing or any client project goes anywhere near this repo.
 
 ## D-010: Resend endpoint name corrects the docs
 Status: Proposed by agent
@@ -121,7 +121,7 @@ Choice: B — use `email/send`, verified directly against the catalog the CLI qu
 Why: The skill's own instructions rank the live catalog (`integrations list`/`info`) above docs prose for exact endpoint names, because the docs can lag a renamed integration. This is a confirmed case of that lag.
 Tradeoff accepted: None — this is a correction, not a tradeoff.
 Would revisit if: `npx deepspace integrations info email/send` stops resolving in a future catalog.
-Mark's call: No judgment call here — the agent caught a straight documentation error against the live catalog before writing any code. Nothing for me to add. *(placeholder — edit before submitting)*
+Mark's call: No judgment call here — the agent caught a straight documentation error against the live catalog before writing any code. Nothing for me to add.
 
 ## D-011: Owner-only cron trigger/pause/resume via a custom role resolver
 Status: Proposed by agent
@@ -132,7 +132,7 @@ Choice: C. In `src/server/realtime-routes.ts`, the `/ws/cron/:roomId` resolver b
 Why: This app never promotes a second admin (no admin-promotion UI is planned), but "admin-only" and "owner-only" are not the same guarantee going forward, and the brief's rule is specifically about the owner. Checking `env.OWNER_USER_ID` directly — the same trust anchor the server-actions guide uses for owner gating — makes the restriction correct even if that assumption ever changes, at no extra cost.
 Tradeoff accepted: If collaborators are ever added as admins (via `deepspace app collaborators`), they still won't be able to trigger/pause/resume cron from the UI — only the single owner user id can. That's the intended behavior per the brief, but worth knowing if the project ever needs a second trusted operator.
 Would revisit if: The project adds a legitimate second admin who should share cron control.
-Mark's call: I want this strictly owner-only, not just admin-only — in case I ever add a second admin down the line, I don't want to have silently handed them cron control too. Agreed with the tighter interpretation. *(placeholder — edit before submitting)*
+Mark's call: I want this strictly owner-only, not just admin-only — in case I ever add a second admin down the line, I don't want to have silently handed them cron control too. Agreed with the tighter interpretation.
 
 ## D-012: Auth model — mixed (public landing, gated board)
 Status: Proposed by agent
@@ -143,7 +143,7 @@ Choice: A, keep the scaffold's mixed default.
 Why: Matches the brief's framing (a visible disclaimer banner before anyone commits to signing in) and keeps the least amount of scaffold rewiring. Trip data (names, routes, who's aboard) is exactly the kind of row that shouldn't be in the `'*'` (anonymous) permission rule, so the board, departure form, check-in, and cron admin all live under `(protected)/`.
 Tradeoff accepted: A reviewer must sign in (Google or GitHub, per the brief) before seeing the board at all — no read-only public preview of a live trip.
 Would revisit if: The brief later wants a public read-only board for shore-side kiosks with no sign-in.
-Mark's call: Agreed — the landing page explaining what this is before asking someone to sign in matters more for a reviewer's first impression than it would for a real deployment. *(placeholder — edit before submitting)*
+Mark's call: Agreed — the landing page explaining what this is before asking someone to sign in matters more for a reviewer's first impression than it would for a real deployment.
 
 ## D-013: Call sheet job writes records via buildCronContext, not a new helper
 Status: Proposed by agent
@@ -154,7 +154,7 @@ Choice: B. Confirmed via the installed type declaration (`node_modules/deepspace
 Why: Reuses a documented, owner-scoped, RBAC-bypassing primitive instead of adding a parallel path or depending on a client staying connected to relay the job's result into a mutation (a demo visitor could navigate away between enqueue and completion).
 Tradeoff accepted: The job handler and the cron task both import `buildCronContext` even though only one guide page shows that pattern — flagged here specifically so it isn't mistaken for a guess later.
 Would revisit if: A documented jobs-specific records context ships and supersedes this.
-Mark's call: I'd rather reuse a documented, owner-scoped primitive in an undocumented-but-type-confirmed way than have the agent invent a new pattern — checking the installed types before trusting it was the right level of caution. *(placeholder — edit before submitting)*
+Mark's call: I'd rather reuse a documented, owner-scoped primitive in an undocumented-but-type-confirmed way than have the agent invent a new pattern — checking the installed types before trusting it was the right level of caution.
 
 ## D-014: GitHub copy of the repo, DeepSpace stays the deploy source of record
 Status: Proposed by agent
@@ -165,7 +165,7 @@ Choice: B.
 Why: The docs explicitly say a claimed DeepSpace-source app "may still keep a review branch on GitHub... that is fine because remotes no longer change the claim" once claimed. `gh auth status` confirms the CLI is already authenticated as this account, and no `origin` remote exists yet (only `space`, the DeepSpace repo). Creating a GitHub repo and pushing `main` to it as `origin` is ordinary Git — `deploy`/`push`/`pull` keep targeting `space` and nothing about future deploys changes.
 Tradeoff accepted: The GitHub copy needs to be pushed again by hand (`git push origin main`) after further commits; it is not kept in sync automatically the way DeepSpace's own `push`/`pull` are.
 Would revisit if: Mark would rather deploys themselves ship from GitHub going forward — that requires a fresh app id and re-pointing DNS/the app name, so only worth it before any more real usage accrues on `shore-board.app.space`.
-Mark's call: This was the only option that didn't risk the live URL — glad it got checked against the docs instead of just running `git remote add` and hoping. *(placeholder — edit before submitting)*
+Mark's call: This was the only option that didn't risk the live URL — glad it got checked against the docs instead of just running `git remote add` and hoping.
 
 ## D-015: Email stays the alert channel; in-app alert is the demonstrable one
 Status: Proposed by agent
@@ -176,7 +176,7 @@ Choice: C. Both A and B need exactly the extra per-user/per-workspace setup this
 Why: Matches the brief's "unfinished edges explained honestly" rubric item, and the engineering (cron idempotency, opt-in, rate cap, owner-billed gating) is real and worth showing even though the Resend leg can't complete without access to the platform's shared account that neither Mark nor I control.
 Tradeoff accepted: The one email-specific behavior that can't be demoed live is an email actually landing in an inbox. Everything else in the alert path (detection, cap, idempotency, in-app banner, call sheet) demos fully.
 Would revisit if: The platform exposes a way to verify a domain or supply a developer-owned Resend key on the shared account, or a future catalog adds a notification integration with no per-user/per-workspace setup.
-Mark's call: I wasn't going to accept "email doesn't work" without the agent at least checking whether Gmail or Slack could cover it for free first. Glad I pushed on that — it turned a dead end into a clear answer (both need per-user or per-workspace setup) instead of a shrug. *(placeholder — edit before submitting)*
+Mark's call: I wasn't going to accept "email doesn't work" without the agent at least checking whether Gmail or Slack could cover it for free first. Glad I pushed on that — it turned a dead end into a clear answer (both need per-user or per-workspace setup) instead of a shrug.
 
 ## D-016: Overdue-scan cap semantics and the daily email number
 Status: Proposed by agent
@@ -187,7 +187,7 @@ Choice: (1) B — `src/cron.ts`'s `alertCandidates` is every trip with `status: 
 Why: (1) Option A silently drops a real alert forever just because it lost a race for budget one minute — that's a worse failure mode than "arrives a minute or two late," and self-healing retry costs nothing extra to implement since it falls out of querying by `alertSentAt` presence rather than tracking a separate "already considered" set. (2) 25/day is generous for a demo (a reviewer clicking "Quick test trip" repeatedly won't hit it) while still being a real ceiling, not a decoration — needed a concrete number to write the code and this is defensible, not load-bearing the way the 20/5 split from your instruction is.
 Tradeoff accepted: A trip stuck in the deferred bucket retries every minute indefinitely until budget frees up or it's checked in — there's no backoff. At demo scale this never matters; at real scale it would need a backoff or a max-defer count.
 Would revisit if: The 25/day number turns out wrong in either direction during testing, or a trip visibly retries for an uncomfortably long time in a demo.
-Mark's call: The 20/5/25 numbers are mine — picked generous enough that normal demo clicking during review never trips the cap, but low enough to be a real ceiling, not decoration. *(placeholder — edit before submitting)*
+Mark's call: The 20/5/25 numbers are mine — picked generous enough that normal demo clicking during review never trips the cap, but low enough to be a real ceiling, not decoration.
 
 ## D-017: Call sheet uses `generateText` + `Output.object`, not `generateObject`
 Status: Proposed by agent
@@ -198,7 +198,7 @@ Choice: B.
 Why: Deprecated-but-present APIs in a hand-authored demo project are exactly the kind of thing worth getting right the first time rather than fixing later — this was free to check (one grep in the installed types) before writing the call.
 Tradeoff accepted: None — same zod schema, same call shape either way; this only changes which top-level function is called.
 Would revisit if: A future `ai` package upgrade removes `Output.object` or changes `result.output`'s shape (the `AI SDK 7 migration` doc would cover it).
-Mark's call: A deprecation warning in a dependency we're already using is exactly the kind of thing that's cheap to get right now and annoying to fix later — good catch, nothing to add. *(placeholder — edit before submitting)*
+Mark's call: A deprecation warning in a dependency we're already using is exactly the kind of thing that's cheap to get right now and annoying to fix later — good catch, nothing to add.
 
 ## D-018: Weather location string is "Trail, OR, US", not "Lost Creek Lake"
 Status: Proposed by agent
@@ -209,7 +209,7 @@ Choice: A — `WEATHER_LOCATION = 'Trail, OR, US'`, confirmed resolvable via a r
 Why: Trail is the small community right at the lake/dam, so weather there is a far better proxy for "conditions at Lost Creek Lake" than a city 20+ miles away in the Rogue Valley (option B) — and option C doesn't work against the live API as verified above.
 Tradeoff accepted: The board's weather reading is technically "Trail, OR" conditions, not literally lake-surface conditions — close enough for a demo, not something to represent as precise marine data.
 Would revisit if: OpenWeatherMap's catalog ever adds coordinate-based lookup to this endpoint, or a more precise station near the lake becomes resolvable.
-Mark's call: Didn't even know Lost Creek Lake wasn't geocodable until this came up — Trail is the right stand-in, and not something a reviewer is likely to question. *(placeholder — edit before submitting)*
+Mark's call: I didn't even know Lost Creek Lake wasn't geocodable until this came up — Trail is the right stand-in.
 
 ## D-019: A real design direction — "harbor" theme, Space Grotesk heading, horizon-watch signature visual
 Status: Proposed by agent
@@ -220,4 +220,4 @@ Choice: B. Direction: a shore watch at dusk, calm vigilance, metaphor of a light
 Why: The grep gate and eyeball checklist exist because this exact complaint ("looks AI-generated") has a name and a known cause in the platform's own docs — worth using the documented fix rather than guessing at colors.
 Tradeoff accepted: A heading web-font load (Space Grotesk, 3 weights) the app didn't have before — small, non-blocking, body text untouched.
 Would revisit if: The product's intended audience or tone changes enough that "lighthouse keeper's logbook" stops fitting.
-Mark's call:
+Mark's call: I chose a simple harbor nautical theme that isn't too busy.
