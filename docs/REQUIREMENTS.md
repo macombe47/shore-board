@@ -45,10 +45,10 @@ The rubric says they'll watch you:
 
 | Skill | How to prepare | Ready |
 |---|---|---|
-| Explain and modify the submitted work | Read every file once. Make several changes by hand. | [ ] |
-| Read errors, form a hypothesis, test it | Log each real bug in BUILD_LOG as guess → test → result | [ ] |
-| Think aloud and ask useful questions | Practice narrating one small change out loud | [ ] |
-| Direct AI tools deliberately and verify output | Keep using plan mode; record rejections in DECISIONS | [ ] |
-| Respond constructively to review | Milestone 5 self-review; note what you changed and why | [ ] |
+| Explain and modify the submitted work | Read every file once. Make several changes by hand. | [x] |
+| Read errors, form a hypothesis, test it | Log each real bug in BUILD_LOG as guess → test → result | [x] |
+| Think aloud and ask useful questions | Practice narrating one small change out loud | [x] |
+| Direct AI tools deliberately and verify output | Keep using plan mode; record rejections in DECISIONS | [x] |
+| Respond constructively to review | Milestone 5 self-review; note what you changed and why | [x] |
 
 Also prepare for GTM questions: who would use DeepSpace, how developers find it, and how you'd turn this project into a tutorial or demo.
